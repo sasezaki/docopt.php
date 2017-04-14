@@ -93,7 +93,8 @@ class LanguageAgnosticTest implements \PHPUnit_Framework_Test, \PHPUnit_Framewor
 		$result->startTest($this);
 		
 		try {
-		    $opt = \Docopt::handle($this->doc, array('argv'=>$this->argv, 'exit'=>false));
+		    //$opt = \Docopt::handle($this->doc, array('argv'=>$this->argv, 'exit'=>false));
+            $opt = (new \Docopt\Handler(['exit' => false]))->handle($this->doc,  $this->argv);
 		}
 		catch (\Exception $ex) {
 			// gulp
