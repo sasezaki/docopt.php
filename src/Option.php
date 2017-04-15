@@ -39,6 +39,7 @@ class Option extends LeafPattern
 
     /**
      * @param string
+     * @return Option
      */
     public static function parse($optionDescription)
     {

@@ -28,6 +28,7 @@ abstract class LeafPattern extends Pattern
     /**
      * @param Pattern[] $left
      * @param Pattern[] $collected
+     * @return array
      */
     public function match($left, $collected=null)
     {

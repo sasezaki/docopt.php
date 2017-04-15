@@ -27,9 +27,10 @@ class Handler
     }
 
     /**
-     * @param string $doc
-     * @param array $argv
+     * @param $doc
+     * @param null $argv
      * @return Response
+     * @throws LanguageError
      */
     function handle($doc, $argv=null)
     {

@@ -7,6 +7,7 @@ class OneOrMore extends BranchPattern
     /**
      * @param Pattern[] $left
      * @param Pattern[] $collected
+     * @return array
      */
     public function match($left, $collected=null)
     {

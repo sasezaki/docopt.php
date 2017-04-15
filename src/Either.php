@@ -8,6 +8,7 @@ class Either extends BranchPattern
     /**
      * @param Pattern[] $left
      * @param Pattern[] $collected
+     * @return array|mixed|null
      */
     public function match($left, $collected=null)
     {

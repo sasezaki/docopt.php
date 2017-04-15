@@ -49,6 +49,7 @@ abstract class Pattern
      * Make pattern-tree tips point to same object if they are equal.
      *
      * @param Pattern[]|null $uniq
+     * @return void
      */
     public function fixIdentities($uniq=null)
     {
