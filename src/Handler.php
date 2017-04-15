@@ -5,19 +5,19 @@ namespace Docopt;
 class Handler
 {
     /** @var bool */
-    public $exit = true;
+    private $exit = true;
 
     /** @var bool */
-    public $exitFullUsage = false;
+    private $exitFullUsage = false;
 
     /** @var bool */
-    public $help = true;
+    private $help = true;
 
     /** @var bool */
-    public $optionsFirst = false;
+    private $optionsFirst = false;
 
     /** @var ?string */
-    public $version;
+    private $version;
 
     public function __construct($options=array())
     {
@@ -30,9 +30,30 @@ class Handler
      * @param $doc
      * @param null $argv
      * @return Response
+     */
+    public function handle($doc, $argv=null)
+    {
+        $response = $this->_handle($doc, $argv);
+
+        if (is_string($response)) {
+            echo $response, PHP_EOL;
+            exit(0);
+        }
+
+        if ($response->status !== 0 && $this->exit) {
+            echo $response->output, PHP_EOL;
+            exit($response->status);
+        }
+        return $response;
+    }
+
+    /**
+     * @param $doc
+     * @param null $argv
+     * @return Response
      * @throws LanguageError
      */
-    function handle($doc, $argv=null)
+    protected function _handle($doc, $argv=null)
     {
         try {
             if ($argv === null && isset($_SERVER['argv'])) {
@@ -40,7 +61,7 @@ class Handler
             }
 
             $usageSections = parse_section('usage:', $doc);
-            if (count($usageSections) == 0) {
+            if (count($usageSections) === 0) {
                 throw new LanguageError('"usage:" (case-insensitive) not found.');
             } elseif (count($usageSections) > 1) {
                 throw new LanguageError('More than one "usage:" (case-insensitive).');
@@ -62,18 +83,10 @@ class Handler
 
             list($help_argument, $version_argument) = extras($argv);
             if ($this->help && $help_argument) {
-                if ($this->exit) {
-                    echo $doc, PHP_EOL;
-                    exit(0);
-                }
-                return new Response([], 0, $doc);
+                return $doc;
             }
             if ($this->version && $version_argument) {
-                if ($this->exit) {
-                    echo $this->version, PHP_EOL;
-                    exit(0);
-                }
-                return new Response([], 0, $this->version);
+                return $this->version;
             }
 
             list($matched, $left, $collected) = $pattern->fix()->match($argv);
@@ -89,25 +102,9 @@ class Handler
             }
 
             $message = !$this->exitFullUsage ? $usage : $doc;
-
-            if ($this->exit) {
-                echo $message, PHP_EOL;
-                exit(1);
-            }
-
             return new Response([], 1, $message);
-
         } catch (ExitException $ex) {
-            $this->handleExit($ex);
             return new Response([], $ex->status, $ex->getMessage());
-        }
-    }
-
-    function handleExit(ExitException $ex)
-    {
-        if ($this->exit) {
-            echo $ex->getMessage().PHP_EOL;
-            exit($ex->status);
         }
     }
 }
