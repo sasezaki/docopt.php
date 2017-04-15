@@ -54,7 +54,7 @@ abstract class Pattern
     public function fixIdentities($uniq=null)
     {
         if (!isset($this->children) || !$this->children) {
-            return $this;
+            return;
         }
         if ($uniq === null) {
             $uniq = array_unique($this->flat());
