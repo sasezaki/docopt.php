@@ -22,8 +22,8 @@ Options:
 
 DOCOPT;
 
-//$result = Docopt::handle($doc, array('version'=>'1.0.0rc2'));
-$result = (new Docopt\Handler())->handle($doc, ['version'=>'1.0.0rc2']);
+$result = (new Docopt\Handler(['version'=>'1.0.0rc2']))->handle($doc);
 
-foreach ($result as $k=>$v)
+foreach ($result as $k=>$v) {
     echo $k.': '.json_encode($v).PHP_EOL;
+}
