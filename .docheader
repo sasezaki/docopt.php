@@ -1,0 +1,10 @@
+/**
+ * This Project is fork version of Docopt.
+ * The most of methods are derived from code of the Doctopt (1.0.3).
+ *
+ * Docopt:
+ * - http://docopt.org
+ * - Licensed under terms of MIT license (see LICENSE-MIT)
+ * - Copyright (c) 2013 Vladimir Keleshev, vladimir@keleshev.com
+ *                      Blake Williams, <code@shabbyrobe.org>
+ */
