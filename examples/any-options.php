@@ -1,5 +1,5 @@
 <?php
-require __DIR__.'/../src/docopt.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $doc = <<<'DOCOPT'
 Example of program which uses [options] shortcut in pattern.
@@ -17,7 +17,7 @@ Options:
 
 DOCOPT;
 
-//$result = Docopt::handle($doc, array('version'=>'1.0.0rc2'));
 $result = (new Docopt\Handler())->handle($doc, ['version'=>'1.0.0rc2']);
-foreach ($result as $k=>$v)
-    echo $k.': '.json_encode($v).PHP_EOL;
+foreach ($result as $k=>$v) {
+    echo $k . ': ' . json_encode($v) . PHP_EOL;
+}

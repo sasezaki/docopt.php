@@ -1,5 +1,5 @@
 <?php
-require __DIR__.'/../src/docopt.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $doc = <<<'DOCOPT'
 Process FILE and optionally apply correction to either left-hand side or
