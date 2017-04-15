@@ -560,7 +560,7 @@ function formal_usage($section)
  * @param Pattern[] $argv
  * @param string $doc
  */
-function extras($help, $version, $argv, $doc)
+function extras($argv)
 {
     $ofound = false;
     $vfound = false;
@@ -572,14 +572,16 @@ function extras($help, $version, $argv, $doc)
             $vfound = true;
         }
     }
-    if ($help && $ofound) {
-        ExitException::$usage = null;
-        throw new ExitException($doc, 0);
-    }
-    if ($version && $vfound) {
-        ExitException::$usage = null;
-        throw new ExitException($version, 0);
-    }
+
+    return [$ofound, $vfound];
+//    if ($help && $ofound) {
+//        ExitException::$usage = null;
+//        throw new ExitException($doc, 0);
+//    }
+//    if ($version && $vfound) {
+//        ExitException::$usage = null;
+//        throw new ExitException($version, 0);
+//    }
 }
 
 

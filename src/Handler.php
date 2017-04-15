@@ -47,9 +47,6 @@ class Handler
             }
             $usage = $usageSections[0];
 
-            // temp fix until python port provides solution
-            ExitException::$usage = !$this->exitFullUsage ? $usage : $doc;
-
             $options = parse_defaults($doc);
 
             $formalUse = formal_usage($usage);
@@ -63,7 +60,21 @@ class Handler
                 $optionsShortcut->children = array_diff((array)$docOptions, $patternOptions);
             }
 
-            extras($this->help, $this->version, $argv, $doc);
+            list($help_argument, $version_argument) = extras($argv);
+            if ($this->help && $help_argument) {
+                if ($this->exit) {
+                    echo $doc, PHP_EOL;
+                    exit(0);
+                }
+                return new Response([], 0, $doc);
+            }
+            if ($this->version && $version_argument) {
+                if ($this->exit) {
+                    echo $this->version, PHP_EOL;
+                    exit(0);
+                }
+                return new Response([], 0, $this->version);
+            }
 
             list($matched, $left, $collected) = $pattern->fix()->match($argv);
             if ($matched && !$left) {
@@ -76,9 +87,17 @@ class Handler
                 }
                 return new Response($return);
             }
-            throw new ExitException();
-        }
-        catch (ExitException $ex) {
+
+            $message = !$this->exitFullUsage ? $usage : $doc;
+
+            if ($this->exit) {
+                echo $message, PHP_EOL;
+                exit(1);
+            }
+
+            return new Response([], 1, $message);
+
+        } catch (ExitException $ex) {
             $this->handleExit($ex);
             return new Response([], $ex->status, $ex->getMessage());
         }
