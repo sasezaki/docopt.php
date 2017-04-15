@@ -28,7 +28,7 @@ class Handler
 
     /**
      * @param $doc
-     * @param null $argv
+     * @param array|string|null $argv
      * @return Response
      */
     public function handle($doc, $argv=null)
@@ -49,8 +49,8 @@ class Handler
 
     /**
      * @param $doc
-     * @param null $argv
-     * @return Response
+     * @param array|string|null $argv
+     * @return Response|string
      * @throws LanguageError
      */
     protected function _handle($doc, $argv=null)
@@ -73,6 +73,7 @@ class Handler
             $formalUse = formal_usage($usage);
             $pattern = parse_pattern($formalUse, $options);
 
+            /** @var Pattern[] $argv */
             $argv = parse_argv(new Tokens($argv), $options, $this->optionsFirst);
 
             $patternOptions = $pattern->flat('Option');
