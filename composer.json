@@ -1,10 +1,9 @@
 {
     "name": "sasezaki/docopt",
     "type": "library",
-    "description": "fork of Port of Python's docopt for PHP 7",
-    "version": "1.0.3",
+    "description": "Fork of Port of Python's docopt",
     "keywords": ["cli","docs"],
-    "homepage": "http://github.com/docopt/docopt.php",
+    "homepage": "http://github.com/sasezaki/docopt.php",
     "license": "MIT",
     "authors": [
         {
