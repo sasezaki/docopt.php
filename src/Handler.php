@@ -19,6 +19,11 @@ class Handler
     /** @var ?string */
     private $version;
 
+    /**
+     * @var callable
+     */
+    private $helpDecorator;
+
     public function __construct($options=array())
     {
         foreach ($options as $k=>$v) {
@@ -45,6 +50,13 @@ class Handler
             exit($response->status);
         }
         return $response;
+    }
+
+    public function withHelpDecorator(callable $decorator) : Handler
+    {
+        $clone = clone $this;
+        $clone->helpDecorator = $decorator;
+        return $clone;
     }
 
     /**
@@ -84,6 +96,9 @@ class Handler
 
             list($help_argument, $version_argument) = extras($argv);
             if ($this->help && $help_argument) {
+                if (is_callable($this->helpDecorator)) {
+                    $doc = $this->helpDecorator($doc);
+                }
                 return $doc;
             }
             if ($this->version && $version_argument) {
