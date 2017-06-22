@@ -1,15 +1,17 @@
 <?php
+declare(strict_types=1);
+
 namespace Docopt;
 
 /**
  * Return true if all cased characters in the string are uppercase and there is
  * at least one cased character, false otherwise.
- * Python method with no knowrn equivalent in PHP.
+ * Python method with no known equivalent in PHP.
  *
  * @param string $string
  * @return bool
  */
-function is_upper($string)
+function is_upper(string $string) : bool
 {
     return preg_match('/[A-Z]/', $string) && !preg_match('/[a-z]/', $string);
 }
@@ -18,10 +20,10 @@ function is_upper($string)
  * Return True if any element of the iterable is true. If the iterable is
  * empty, return False. Python method with no known equivalent in PHP.
  *
- * @param array|\Iterator $iterable
+ * @param Iterable $iterable
  * @return bool
  */
-function any($iterable)
+function any(Iterable $iterable) : bool
 {
     foreach ($iterable as $element) {
         if ($element) {
@@ -32,7 +34,7 @@ function any($iterable)
 }
 
 /**
- * The PHP version of this doesn't support array iterators
+ * The PHP version of this does not support array iterators
  * @param array|\Iterator $input
  * @param callable $callback
  * @param bool $reKey
@@ -51,13 +53,12 @@ function array_filter($input, $callback, $reKey=false)
 }
 
 /**
- * The PHP version of this doesn't support array iterators
+ * The PHP version of this does not support array iterators
  * @param array $values,...
  * @return array
  */
-function array_merge()
+function array_merge(...$values)
 {
-    $values = func_get_args();
     $resolved = array();
     foreach ($values as $v) {
         if ($v instanceof \Iterator) {
@@ -146,7 +147,7 @@ function dump_scalar($scalar)
  * @param Pattern $pattern
  * @return Either
  */
-function transform($pattern)
+function transform($pattern) : Either
 {
     $result = array();
     $groups = array(array($pattern));
@@ -459,10 +460,12 @@ function parse_atom(Tokens $tokens, \ArrayIterator $options)
  * else:
  *     argv ::= [ long | shorts | argument ]* [ '--' [ argument ]* ] ;
  *
+ * @param Tokens $tokens
+ * @param \ArrayIterator $options
  * @param bool $optionsFirst
  * @return Pattern[]
  */
-function parse_argv(Tokens $tokens, \ArrayIterator $options, $optionsFirst=false)
+function parse_argv(Tokens $tokens, \ArrayIterator $options, bool $optionsFirst=false)
 {
     $parsed = array();
 
@@ -499,7 +502,7 @@ function parse_defaults($doc)
     foreach (parse_section('options:', $doc) as $s) {
         # FIXME corner case "bla: options: --foo"
         list (, $s) = explode(':', $s, 2);
-        $splitTmp = array_slice(preg_split("@\n[ \t]*(-\S+?)@", "\n".$s, null, PREG_SPLIT_DELIM_CAPTURE), 1);
+        $splitTmp = array_slice(preg_split("@\n[ \t]*(-\S+?)@", "\n".$s, -1, PREG_SPLIT_DELIM_CAPTURE), 1);
         $split = array();
         for ($cnt = count($splitTmp), $i=0; $i < $cnt; $i+=2) {
             $split[] = $splitTmp[$i] . (isset($splitTmp[$i+1]) ? $splitTmp[$i+1] : '');
@@ -555,12 +558,10 @@ function formal_usage($section)
 }
 
 /**
- * @param bool $help
- * @param ?string $version
- * @param Pattern[] $argv
- * @param string $doc
+ * @param array $argv
+ * @return array
  */
-function extras($argv)
+function extras(array $argv)
 {
     $ofound = false;
     $vfound = false;
@@ -574,14 +575,6 @@ function extras($argv)
     }
 
     return [$ofound, $vfound];
-//    if ($help && $ofound) {
-//        ExitException::$usage = null;
-//        throw new ExitException($doc, 0);
-//    }
-//    if ($version && $vfound) {
-//        ExitException::$usage = null;
-//        throw new ExitException($version, 0);
-//    }
 }
 
 
