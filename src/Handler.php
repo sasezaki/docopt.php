@@ -97,7 +97,7 @@ class Handler
             list($help_argument, $version_argument) = extras($argv);
             if ($this->help && $help_argument) {
                 if (is_callable($this->helpDecorator)) {
-                    $doc = $this->helpDecorator($doc);
+                    $doc = call_user_func($this->helpDecorator, $doc);
                 }
                 return $doc;
             }
